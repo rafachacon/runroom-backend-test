@@ -35,8 +35,8 @@ class GildedRose {
             }
 
             // ... and is not negative.
-            if ($item->quality < 0) {
-                $item->quality = 0;
+            if ($item->quality < self::MIN_QUALITY) {
+                $item->quality = self::MIN_QUALITY;
             }
         }
     }
