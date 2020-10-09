@@ -22,50 +22,64 @@ class GildedRose {
 
     function update_quality() {
         foreach ($this->items as $item) {
-            if ($item->name != self::AGED_BRIE && $item->name != self::BACKSTAGE) {
-                if ($item->quality > 0) {
-                    if ($item->name != self::SULFURAS) {
-                        $item->quality = $item->quality - 1;
-                    }
+
+            // Sulfuras does not change,
+            // because it is composed of flaming red elementium
+            // and etched from end to end with intricate runes.
+            if ($item->name == self::SULFURAS) {
+                continue;
+            }
+
+            // Aged Brie increases double! tasty!
+            if ($item->name == self::AGED_BRIE) {
+                $item->quality = $item->quality + 2;
+                // make sure about the max quality restriction.
+                if ($item->quality > self::MAX_QUALITY) {
+                    $item->quality = self::MAX_QUALITY;
                 }
-            } else {
-                if ($item->quality < 50) {
+                continue;
+            }
+
+            // Backstage passes to a TAFKAL80ETC concert changes according to some rules
+            // (Blizzard t-shirt not included)
+            if ($item->name == self::BACKSTAGE) {
+                if ($item->sell_in > 10) {
                     $item->quality = $item->quality + 1;
-                    if ($item->name == self::BACKSTAGE) {
-                        if ($item->sell_in < 11) {
-                            if ($item->quality < 50) {
-                                $item->quality = $item->quality + 1;
-                            }
-                        }
-                        if ($item->sell_in < 6) {
-                            if ($item->quality < 50) {
-                                $item->quality = $item->quality + 1;
-                            }
-                        }
-                    }
+                    continue;
+                }
+
+                if ($item->sell_in > 5 && $item->sell_in <= 10) {
+                    $item->quality = $item->quality + 2;
+                    continue;
+                }
+
+                if ($item->sell_in > 0 && $item->sell_in <= 5) {
+                    $item->quality = $item->quality + 3;
+                    continue;
+                }
+
+                if ($item->sell_in <= 0) {
+                    $item->quality = 0;
+                    continue;
                 }
             }
 
-            if ($item->name != self::SULFURAS) {
-                $item->sell_in = $item->sell_in - 1;
-            }
+            // All items degrade quality over time.
+            $item->quality = $item->quality - 1;
 
+            // Also, degrade again (double) when sell in has passed.
             if ($item->sell_in < 0) {
-                if ($item->name != self::AGED_BRIE) {
-                    if ($item->name != self::BACKSTAGE) {
-                        if ($item->quality > 0) {
-                            if ($item->name != self::SULFURAS) {
-                                $item->quality = $item->quality - 1;
-                            }
-                        }
-                    } else {
-                        $item->quality = 0;
-                    }
-                } else {
-                    if ($item->quality < 50) {
-                        $item->quality = $item->quality + 1;
-                    }
-                }
+                $item->quality = $item->quality - 1;
+            }
+
+            // Finally, make sure quality is not greather than 50...
+            if ($item->quality > self::MAX_QUALITY) {
+                $item->quality = self::MAX_QUALITY;
+            }
+
+            // ... and is not negative.
+            if ($item->quality < 0) {
+                $item->quality = 0;
             }
         }
     }
