@@ -23,53 +23,55 @@ class GildedRose {
     function update_quality() {
         foreach ($this->items as $item) {
 
-            // Sulfuras does not change,
-            // because it is composed of flaming red elementium
-            // and etched from end to end with intricate runes.
-            if ($item->name == self::SULFURAS) {
-                continue;
-            }
+            switch ($item->name) {
+                // Sulfuras does not change,
+                // because it is composed of flaming red elementium
+                // and etched from end to end with intricate runes.
+                case self::SULFURAS:
+                    break;
 
-            // Aged Brie increases double! tasty!
-            if ($item->name == self::AGED_BRIE) {
-                $item->quality = $item->quality + 2;
-                // make sure about the max quality restriction.
-                if ($item->quality > self::MAX_QUALITY) {
-                    $item->quality = self::MAX_QUALITY;
-                }
-                continue;
-            }
-
-            // Backstage passes to a TAFKAL80ETC concert changes according to some rules
-            // (Blizzard t-shirt not included)
-            if ($item->name == self::BACKSTAGE) {
-                if ($item->sell_in > 10) {
-                    $item->quality = $item->quality + 1;
-                    continue;
-                }
-
-                if ($item->sell_in > 5 && $item->sell_in <= 10) {
+                // Aged Brie increases double! tasty!
+                case self::AGED_BRIE:
                     $item->quality = $item->quality + 2;
-                    continue;
-                }
+                    // make sure about the max quality restriction.
+                    if ($item->quality > self::MAX_QUALITY) {
+                        $item->quality = self::MAX_QUALITY;
+                    }
+                    break;
 
-                if ($item->sell_in > 0 && $item->sell_in <= 5) {
-                    $item->quality = $item->quality + 3;
-                    continue;
-                }
+                // Backstage passes to a TAFKAL80ETC concert changes according to some rules
+                // (Blizzard t-shirt not included)
+                case self::BACKSTAGE:
+                    if ($item->sell_in > 10) {
+                        $item->quality = $item->quality + 1;
+                        break;
+                    }
 
-                if ($item->sell_in <= 0) {
-                    $item->quality = 0;
-                    continue;
-                }
-            }
+                    if ($item->sell_in > 5 && $item->sell_in <= 10) {
+                        $item->quality = $item->quality + 2;
+                        break;
+                    }
 
-            // All items degrade quality over time.
-            $item->quality = $item->quality - 1;
+                    if ($item->sell_in > 0 && $item->sell_in <= 5) {
+                        $item->quality = $item->quality + 3;
+                        break;
+                    }
 
-            // Also, degrade again (double) when sell in has passed.
-            if ($item->sell_in < 0) {
-                $item->quality = $item->quality - 1;
+                    if ($item->sell_in <= 0) {
+                        $item->quality = 0;
+                        break;
+                    }
+                    break;
+
+                default:
+                    // All other items degrade quality over time.
+                    $item->quality = $item->quality - 1;
+
+                    // Also, degrade again (double) when "sell in" has passed.
+                    if ($item->sell_in < 0) {
+                        $item->quality = $item->quality - 1;
+                    }
+                    break;
             }
 
             // Finally, make sure quality is not greather than 50...
