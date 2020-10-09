@@ -3,6 +3,9 @@
 namespace Runroom\GildedRose;
 
 class SulfurasUpdater implements GildedRoseUpdaterInterface {
+    /**
+     * @inheritDoc
+     */
     public function update($item) {
         // Sulfuras does not change,
         // because it is composed of flaming red elementium

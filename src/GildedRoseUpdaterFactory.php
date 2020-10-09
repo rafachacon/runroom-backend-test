@@ -2,7 +2,16 @@
 
 namespace Runroom\GildedRose;
 
+/**
+ * Class GildedRoseUpdaterFactory
+ * @package Runroom\GildedRose
+ */
 class GildedRoseUpdaterFactory {
+
+    /**
+     * @param string $itemName
+     * @return mixed Updater object.
+     */
     public static function getUpdater($itemName) {
         switch ($itemName) {
             case GildedRose::SULFURAS:

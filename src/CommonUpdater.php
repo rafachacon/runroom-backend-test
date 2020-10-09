@@ -4,6 +4,9 @@ namespace Runroom\GildedRose;
 
 class CommonUpdater implements GildedRoseUpdaterInterface {
 
+    /**
+     * @inheritDoc
+     */
     public function update($item) {
         // A common item degrades quality over time.
         $item->quality = $item->quality - 1;

@@ -2,6 +2,10 @@
 
 namespace Runroom\GildedRose;
 
+/**
+ * Class GildedRose
+ * @package Runroom\GildedRose
+ */
 class GildedRose {
 
     const AGED_BRIE = "Aged Brie";
@@ -16,10 +20,17 @@ class GildedRose {
      */
     private array $items;
 
+    /**
+     * GildedRose constructor.
+     * @param Item[] $items
+     */
     function __construct($items) {
         $this->items = $items;
     }
 
+    /**
+     * Updates item quality using the GildedRoseUpdaterFactory factory.
+     */
     function update_quality() {
         foreach ($this->items as $item) {
 

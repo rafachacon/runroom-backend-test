@@ -3,6 +3,9 @@
 namespace Runroom\GildedRose;
 
 class AgedBrieUpdater implements GildedRoseUpdaterInterface {
+    /**
+     * @inheritDoc
+     */
     public function update($item) {
         // Aged Brie increases double! tasty!
         $item->quality = $item->quality + 2;
